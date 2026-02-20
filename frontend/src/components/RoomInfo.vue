@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { inject } from "vue";
+import Button from "primevue/button";
+import RoomInfoSlot from "./RoomInfoSlot.vue";
+import RoomUserList from "./RoomUserList.vue";
 
 defineProps<{
 	roomName: string;

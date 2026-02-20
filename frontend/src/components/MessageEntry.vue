@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, inject } from "vue";
+import Textarea from "primevue/textarea";
 
 type SendMessageFunction = (message: string) => void;
 

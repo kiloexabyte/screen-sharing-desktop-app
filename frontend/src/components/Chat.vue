@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { watch, nextTick } from "vue";
+import { ref, watch, nextTick } from "vue";
+import MessageEntry from "./MessageEntry.vue";
+import type { ChatMessage } from "../types";
 
 const messagesContainer = ref<HTMLElement | null>(null);
 const scrollToBottom = () => {
