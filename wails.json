@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "screen-sharing-desktop-app",
+  "outputfilename": "screen-sharing-desktop-app",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "kiloexabyte",
+    "email": "vothanhdat278+1@gmail.com"
+  }
+}
