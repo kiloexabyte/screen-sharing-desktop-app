@@ -8,7 +8,7 @@ on:
       - "**.md"
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     container:
       image: kiloexabyte/runner-image
@@ -23,9 +23,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-
       - name: Build frontend
         working-directory: ./frontend
         run: npm install && npm run build
@@ -34,8 +31,3 @@ jobs:
         env:
           GOFLAGS: -buildvcs=false
         run: op lint
-
-      - name: Build
-        env:
-          GOFLAGS: -buildvcs=false
-        run: op build
