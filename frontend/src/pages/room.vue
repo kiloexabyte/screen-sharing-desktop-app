@@ -226,7 +226,11 @@ provide("leaveRoom", leave);
   <Dialog
     v-model:visible="dialogVisible"
     header="Failed to join/host"
-    @hide="() => { dialogVisible = false; }"
+    @hide="
+      () => {
+        dialogVisible = false;
+      }
+    "
   >
     <p>Hosting/Joining room failed, error message: {{ failureMessage }}</p>
     <Button type="button" @click="handleCloseDialog">Close</Button>
