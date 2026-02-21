@@ -1,9 +1,8 @@
-package commands
+package composite
 
 import (
 	"context"
 	"fmt"
-	"log"
 	"runtime"
 
 	"lesiw.io/command"
@@ -17,7 +16,7 @@ var platforms = []string{
 	"darwin/arm64",
 }
 
-func (Ops) BuildAll() {
+func (Ops) BuildAll() error {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "wails")
 
@@ -29,8 +28,9 @@ func (Ops) BuildAll() {
 				fmt.Printf("Skipping %s (requires macOS)\n", platform)
 				continue
 			}
-			log.Fatal(err)
+			return err
 		}
 		fmt.Printf("Built %s successfully\n", platform)
 	}
+	return nil
 }
