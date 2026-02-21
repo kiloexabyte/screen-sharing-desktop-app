@@ -8,10 +8,10 @@ on:
       - "**.md"
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     container:
-      image: kiloexabyte/runner-image
+      image: ghcr.io/kiloexabyte/wails-ubuntu
     steps:
       - uses: actions/checkout@v6
 
@@ -31,3 +31,8 @@ jobs:
         env:
           GOFLAGS: -buildvcs=false
         run: op lint
+
+      - name: Build
+        env:
+          GOFLAGS: -buildvcs=false
+        run: op build
