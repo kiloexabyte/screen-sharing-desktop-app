@@ -23,16 +23,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm install && npm run build
-
-      - name: Run lint
+      - name: Run CI
         env:
           GOFLAGS: -buildvcs=false
-        run: op lint
-
-      - name: Build all platforms
-        env:
-          GOFLAGS: -buildvcs=false
-        run: op build_all
+        run: op ci
