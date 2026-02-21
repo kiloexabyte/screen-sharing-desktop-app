@@ -12,7 +12,8 @@ func (Ops) Build() {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "wails")
 
-	if err := sh.Exec(ctx, "wails", "build", "-tags", "webkit2gtk_4.1"); err != nil {
+	args := []string{"wails", "build", "-tags", "webkit2gtk_4.1"}
+	if err := sh.Exec(ctx, args...); err != nil {
 		log.Fatal(err)
 	}
 }
