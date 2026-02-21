@@ -32,7 +32,7 @@ jobs:
           GOFLAGS: -buildvcs=false
         run: op lint
 
-      - name: Build
+      - name: Build all platforms
         env:
           GOFLAGS: -buildvcs=false
-        run: op build
+        run: op build_all
