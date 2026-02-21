@@ -26,6 +26,10 @@ jobs:
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm install && npm run build
+
       - name: Run lint
         env:
           GOFLAGS: -buildvcs=false
