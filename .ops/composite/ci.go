@@ -27,10 +27,5 @@ func (o Ops) Ci() error {
 		return fmt.Errorf("lint: %w", err)
 	}
 
-	fmt.Println("Building all platforms...")
-	if err := o.BuildAll(); err != nil {
-		return fmt.Errorf("build_all: %w", err)
-	}
-
 	return nil
 }

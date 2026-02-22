@@ -3,13 +3,14 @@ package composite
 import (
 	"context"
 	"fmt"
-	"runtime"
+	"os"
+	"strings"
 
 	"lesiw.io/command"
 	"lesiw.io/command/sys"
 )
 
-var platforms = []string{
+var defaultPlatforms = []string{
 	"linux/amd64",
 	"linux/arm64",
 	"windows/amd64",
@@ -26,6 +27,11 @@ func (Ops) BuildAll() error {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "wails")
 
+	platforms := defaultPlatforms
+	if env := os.Getenv("PLATFORMS"); env != "" {
+		platforms = strings.Split(env, ",")
+	}
+
 	for _, platform := range platforms {
 		fmt.Printf("Building for %s...\n", platform)
 		buildCtx := ctx
@@ -39,15 +45,6 @@ func (Ops) BuildAll() error {
 			"-platform", platform,
 		)
 		if err != nil {
-			isDarwin := len(platform) >= 6 &&
-				platform[:6] == "darwin"
-			if runtime.GOOS != "darwin" && isDarwin {
-				fmt.Printf(
-					"Skipping %s (requires macOS)\n",
-					platform,
-				)
-				continue
-			}
 			return err
 		}
 		fmt.Printf("Built %s successfully\n", platform)
