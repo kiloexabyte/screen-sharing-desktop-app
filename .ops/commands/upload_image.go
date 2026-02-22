@@ -34,11 +34,18 @@ func (Ops) UploadImage() error {
 	}
 
 	// Push the image
+	arch := os.Getenv("IMAGE_ARCH")
+	if arch == "" {
+		arch = "amd64"
+	}
+
 	tag := os.Getenv("IMAGE_TAG")
 	if tag == "" {
 		tag = "latest"
 	}
-	imageTag := "ghcr.io/kiloexabyte/wails-ubuntu:" + tag
+
+	name := "wails-ubuntu-" + arch
+	imageTag := "ghcr.io/kiloexabyte/" + name + ":" + tag
 
 	return command.Do(ctx, m, "docker", "push", imageTag)
 }

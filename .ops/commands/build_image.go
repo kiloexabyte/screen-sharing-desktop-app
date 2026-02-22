@@ -12,15 +12,23 @@ func (Ops) BuildImage() error {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "docker")
 
+	arch := os.Getenv("IMAGE_ARCH")
+	if arch == "" {
+		arch = "amd64"
+	}
+
 	tag := os.Getenv("IMAGE_TAG")
 	if tag == "" {
 		tag = "latest"
 	}
-	imageTag := "ghcr.io/kiloexabyte/wails-ubuntu:" + tag
+
+	name := "wails-ubuntu-" + arch
+	imageTag := "ghcr.io/kiloexabyte/" + name + ":" + tag
+	dockerfile := "docker/Dockerfile.ubuntu-" + arch
 
 	err := sh.Exec(ctx, "docker", "build",
 		"-t", imageTag,
-		"-f", "docker/Dockerfile.ubuntu",
+		"-f", dockerfile,
 		".")
 	if err != nil {
 		return err
