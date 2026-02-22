@@ -18,16 +18,35 @@ var platforms = []string{
 	"darwin/arm64",
 }
 
+var crossCC = map[string]string{
+	"linux/arm64":   "aarch64-linux-gnu-gcc",
+	"windows/amd64": "x86_64-w64-mingw32-gcc",
+}
+
 func (Ops) BuildAll() error {
 	ctx := context.Background()
 	sh := command.Shell(sys.Machine(), "wails")
 
 	for _, platform := range platforms {
 		fmt.Printf("Building for %s...\n", platform)
-		err := sh.Exec(ctx, "wails", "build", "-platform", platform)
+		buildCtx := ctx
+		if cc, ok := crossCC[platform]; ok {
+			buildCtx = command.WithEnv(ctx, map[string]string{
+				"CC": cc,
+			})
+		}
+		err := sh.Exec(
+			buildCtx, "wails", "build",
+			"-platform", platform,
+		)
 		if err != nil {
-			if runtime.GOOS != "darwin" && platform[:6] == "darwin" {
-				fmt.Printf("Skipping %s (requires macOS)\n", platform)
+			isDarwin := len(platform) >= 6 &&
+				platform[:6] == "darwin"
+			if runtime.GOOS != "darwin" && isDarwin {
+				fmt.Printf(
+					"Skipping %s (requires macOS)\n",
+					platform,
+				)
 				continue
 			}
 			return err
