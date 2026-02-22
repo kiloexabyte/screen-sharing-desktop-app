@@ -76,6 +76,7 @@ jobs:
         env:
           GOFLAGS: -buildvcs=false
           PLATFORMS: linux/arm64
+          WAILS_TAGS: webkit2_41
         run: op build_all
 
   build-macos:

@@ -40,10 +40,14 @@ func (Ops) BuildAll() error {
 				"CC": cc,
 			})
 		}
-		err := sh.Exec(
-			buildCtx, "wails", "build",
+		args := []string{
+			"wails", "build",
 			"-platform", platform,
-		)
+		}
+		if tags := os.Getenv("WAILS_TAGS"); tags != "" {
+			args = append(args, "-tags", tags)
+		}
+		err := sh.Exec(buildCtx, args...)
 		if err != nil {
 			return err
 		}
