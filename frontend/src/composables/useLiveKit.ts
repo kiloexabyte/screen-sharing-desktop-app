@@ -7,6 +7,7 @@ import {
   RemoteTrackPublication,
   Room,
   RoomEvent,
+  Track,
   type RoomOptions,
   type ScreenShareCaptureOptions,
   type ChatMessage as LiveKitChatMessage,
@@ -546,6 +547,41 @@ export function useLiveKit() {
     return peerConnections.value.get(identity);
   };
 
+  const publishStream = async (
+    stream: MediaStream,
+    videoElement: HTMLMediaElement,
+  ) => {
+    if (isServerSideStreaming.value) {
+      // SFU mode: publish tracks through LiveKit server
+      for (const track of stream.getTracks()) {
+        await currentRoom.value?.localParticipant.publishTrack(track, {
+          source:
+            track.kind === "video"
+              ? Track.Source.ScreenShare
+              : Track.Source.ScreenShareAudio,
+        });
+      }
+    } else {
+      // P2P mode: set localStream and create offers to all participants
+      localStream.value = stream;
+
+      const res = await GetUsersInRoom(
+        currentRoom.value?.name.toString().trim() ?? "",
+      );
+      if (!res.ok) {
+        throw new Error("error fetching users in lobby");
+      }
+      const data = await res.json();
+
+      for (const p of data.result) {
+        if (p.name === currentUsername.value) {
+          continue;
+        }
+        await createOffer(p.identity, videoElement);
+      }
+    }
+  };
+
   const endStream = async () => {
     clearLocalStream(localStream);
     await clearPeerConnection();
@@ -578,6 +614,7 @@ export function useLiveKit() {
     createAnswer,
     addAnswer,
     toggleScreenshareP2P,
+    publishStream,
     cleanUpData,
     isServerSideStreaming,
   };

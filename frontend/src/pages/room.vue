@@ -5,6 +5,7 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import Chat from "../components/Chat.vue";
 import RoomInfo from "../components/RoomInfo.vue";
+import MediaSourcePicker from "../components/MediaSourcePicker.vue";
 import { useChatMessage } from "../composables/useChatMessage";
 import { useLiveKit } from "../composables/useLiveKit";
 import { config } from "../config";
@@ -21,14 +22,14 @@ const serverSideStreamingEnabled = ref<boolean>(false);
 const chatIsOpen = ref(true);
 const dialogVisible = ref<boolean>(false);
 const failureMessage = ref<string>("");
+const mediaPickerVisible = ref<boolean>(false);
 
 const {
   hostRoom,
   leaveRoom,
   joinRoom,
   sendMessageLiveKit,
-  toggleScreenshareP2P,
-  toggleScreenshare,
+  publishStream,
   cleanUpData,
   participantNames,
   isServerSideStreaming,
@@ -96,13 +97,15 @@ const preventPlayPause = (event: MouseEvent): void => {
 };
 
 const handleToggleStream = async () => {
-  if (localVideo.value) {
-    if (serverSideStreamingEnabled.value) {
-      await toggleScreenshare(localVideo.value);
-    } else {
-      await toggleScreenshareP2P(localVideo.value);
-    }
-  }
+  mediaPickerVisible.value = true;
+};
+
+const handleMediaSelected = async (stream: MediaStream) => {
+  mediaPickerVisible.value = false;
+  if (!localVideo.value) return;
+
+  localVideo.value.srcObject = stream;
+  await publishStream(stream, localVideo.value);
 };
 
 const handleToggleChat = async () => {
@@ -222,6 +225,12 @@ provide("leaveRoom", leave);
       />
     </div>
   </div>
+
+  <MediaSourcePicker
+    :visible="mediaPickerVisible"
+    @select="handleMediaSelected"
+    @close="mediaPickerVisible = false"
+  />
 
   <Dialog
     v-model:visible="dialogVisible"
