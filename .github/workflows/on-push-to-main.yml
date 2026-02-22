@@ -46,7 +46,7 @@ jobs:
       - name: Build linux/amd64 and windows/amd64
         env:
           GOFLAGS: -buildvcs=false
-          PLATFORMS: linux/amd64,windows/amd64
+          PLATFORMS: linux/amd64,linux/386,windows/amd64,windows/386
         run: op build_all
 
   build-linux-arm64:
