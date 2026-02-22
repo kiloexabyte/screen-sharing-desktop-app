@@ -43,10 +43,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm install && npm run build
-
       - name: Build linux/amd64 and windows/amd64
         env:
           GOFLAGS: -buildvcs=false
@@ -67,10 +63,6 @@ jobs:
           key: ${{ runner.os }}-arm64-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-arm64-node-
-
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm install && npm run build
 
       - name: Build linux/arm64
         env:
@@ -96,10 +88,6 @@ jobs:
         run: |
           go install github.com/wailsapp/wails/v2/cmd/wails@latest
           go install lesiw.io/op@latest
-
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm install && npm run build
 
       - name: Build darwin/amd64 and darwin/arm64
         env:
