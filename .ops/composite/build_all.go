@@ -11,7 +11,9 @@ import (
 
 var platforms = []string{
 	"linux/amd64",
+	"linux/arm64",
 	"windows/amd64",
+	"windows/arm64",
 	"darwin/amd64",
 	"darwin/arm64",
 }
