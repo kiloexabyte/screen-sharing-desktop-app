@@ -28,7 +28,7 @@ jobs:
           GOFLAGS: -buildvcs=false
         run: op ci
 
-  build-linux-windows:
+  build-linux-and-windows-x86:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/kiloexabyte/wails-ubuntu-amd64
@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build linux/amd64 and windows/amd64
+      - name: Build
         env:
           GOFLAGS: -buildvcs=false
           PLATFORMS: linux/amd64,linux/386,windows/amd64,windows/386
@@ -64,7 +64,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-arm64-node-
 
-      - name: Build linux/arm64
+      - name: Build
         env:
           GOFLAGS: -buildvcs=false
           PLATFORMS: linux/arm64
@@ -89,7 +89,7 @@ jobs:
           go install github.com/wailsapp/wails/v2/cmd/wails@latest
           go install lesiw.io/op@latest
 
-      - name: Build darwin/amd64 and darwin/arm64
+      - name: Build
         env:
           PLATFORMS: darwin/amd64,darwin/arm64
         run: op build_all

@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-amd64:
+  build-amd64-image:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -24,7 +24,7 @@ jobs:
           docker build -t ghcr.io/kiloexabyte/wails-ubuntu-amd64:latest -f docker/Dockerfile.ubuntu-amd64 .
           docker push ghcr.io/kiloexabyte/wails-ubuntu-amd64:latest
 
-  build-arm64:
+  build-arm64-image:
     runs-on: ubuntu-24.04-arm
     permissions:
       packages: write
